@@ -1,10 +1,12 @@
 #!/bin/bash
 
 SCRIPT_PATH=$(dirname $(readlink -f $0))/../src/less
+# echo $SCRIPT_PATH
 inotifywait -r -mrq -e close_write -e moved_to -e modify,close_write --format "%w%f" $SCRIPT_PATH | while read "file"; do
     if [[ ${file:(-5)} == ".less" ]]; then
         echo
-        cssbeautify <(lessc $SCRIPT_PATH/styles.less) > $SCRIPT_PATH/../css/styles.css
+        echo "CHANGES IN " $file
+        echo "REWRITE: " $SCRIPT_PATH/../../css/styles.css
         cssbeautify <(lessc --no-ie-compat $SCRIPT_PATH/styles.less) > $SCRIPT_PATH/../../css/styles.css
     fi
 done
